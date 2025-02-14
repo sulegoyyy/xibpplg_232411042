@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perpustakaan</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Selamat Datang di Perpustakaan</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="index.php">Home</a></li>
+            <li><a href="books.php">Buku</a></li>
+            <li><a href="members.php">Anggota</a></li>
+            <li><a href="loans.php">Peminjaman</a></li>
+            <li><a href="contact.php">Kontak</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h2>Daftar Buku</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Buku</th>
+                    <th>Judul</th>
+                    <th>Pengarang</th>
+                    <th>Tahun Terbit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                // Koneksi ke database
+                $conn = new mysqli("localhost", "root", "", "perpustakaan");
+
+                // Cek koneksi
+                if ($conn->connect_error) {
+                    die("Koneksi gagal: " . $conn->connect_error);
+                }
+
+                // Query untuk mengambil data buku
+                $sql = "SELECT id_buku, judul, pengarang, tahun_terbit FROM buku";
+                $result = $conn->query($sql);
+
+                // Tampilkan data buku
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<tr>
+                                <td>{$row['id_buku']}</td>
+                                <td>{$row['judul']}</td>
+                                <td>{$row['pengarang']}</td>
+                                <td>{$row['tahun_terbit']}</td>
+                              </tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='4'>Tidak ada data buku</td></tr>";
+                }
+
+                // Tutup koneksi
+                $conn->close();
+                ?>
+            </tbody>
+        </table>
+    </main>
+    <footer>
+        <p>&copy; 2025 Perpustakaan</p>
+    </footer>
+</body>
+</html>
